@@ -11,6 +11,7 @@ except Exception as e:
     gen_colours = {}
 
 def colour_pheno(genotype):
+    # print(len(gen_colours))
     if str(genotype) in gen_colours.keys():
         colour = gen_colours[str(genotype)]
         pass
