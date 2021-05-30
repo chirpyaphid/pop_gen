@@ -1,9 +1,9 @@
-# import random
-# import pygame
+import random
+import pygame
 # import os
-# import base_functions as bf
-# from gen_settings import *
-from plants import *
+import base_functions as bf
+from gen_settings import *
+from plants import plant
 import terrains as terrains
 import collections
 
@@ -64,9 +64,14 @@ def draw_window(male_plants, female_plants, parent_plants, genotypes, current_ge
     phenos = []
 
     WIN.fill(base['BLACK'])
-    pygame.draw.rect(WIN, (200, 20, 20), terrains.DRY_TERRAIN)
-    pygame.draw.rect(WIN, (20, 20, 200), terrains.WET_TERRAIN)
-    pygame.draw.rect(WIN, (200, 20, 200), terrains.SWAMP)
+    if len(terrains.terrain_list) == 1:
+        pygame.draw.rect(WIN, (0, 0, 0), terrains.DRY_TERRAIN2)
+        pygame.draw.rect(WIN, (0, 0, 0), terrains.SWAMP)
+        pygame.draw.rect(WIN, (0, 0, 0), terrains.WET_TERRAIN)
+    else:
+        pygame.draw.rect(WIN, (200, 20, 20), terrains.DRY_TERRAIN)
+        pygame.draw.rect(WIN, (150, 0, 150), terrains.SWAMP)
+        pygame.draw.rect(WIN, (20, 20, 200), terrains.WET_TERRAIN)
 
     for plant in male_plants:
         pheno, color = plant.pheno()
@@ -108,14 +113,14 @@ def draw_window(male_plants, female_plants, parent_plants, genotypes, current_ge
         m_count = FONT.render(f"Males: {len(male_plants)}", True, base['WHITE'])
         WIN.blit(m_count, [5, x])
         x += 20
-        m_count = FONT.render(f"Males TD: {total_males}", True, base['WHITE'])
+        m_count = FONT.render(f"Males TD: {bf.total_males}", True, base['WHITE'])
         WIN.blit(m_count, [5, x])
         x += 25
 
         f_count = FONT.render(f"Females: {len(female_plants)}", True, base['WHITE'])
         WIN.blit(f_count, [5, x])
         x += 20
-        f_count = FONT.render(f"Females TD: {total_females}", True, base['WHITE'])
+        f_count = FONT.render(f"Females TD: {bf.total_females}", True, base['WHITE'])
         WIN.blit(f_count, [5, x])
         x += 25
 
@@ -197,46 +202,7 @@ def a_colour_pheno(genotype):
     return colour
 
 
-def create_crosses(p1, p2, females, males, pollination):
-    global mutation_count, total_males, total_females
-    if males <= plant_details['min_males']:
-        for x in range(10):
-            new_plant = plant(list(zip(p1.divide(),
-                                       p2.divide())),
-                              f"Plant", phenotypes, females)
-            new_plant.sex = base['SEX'][random.randint(0, 1)]
-    new_plant = plant(list(zip(p1.divide(),
-                               p2.divide())),
-                      f"Plant", phenotypes, females)
-    new_plant.gen = p1.gen + 1
-    # Mutation Point
-    if new_plant.gen > plant_details['mutation_point']:
-        gene_position = random.randint(0, len(new_plant.genotype) - 1)
-        new_gene = []
-        for allele in new_plant.genotype[gene_position]:
-            if allele.isupper():
-                new_gene.append(allele.lower())
-            else:
-                new_gene.append(allele.upper())
-        mutation_count += 1
-        new_plant.gen = 0
-        new_plant.genotype[gene_position] = tuple(new_gene)
 
-    new_plant.sex = base['SEX'][random.randint(0, 1)]
-
-    if pollination == 's':
-        new_plant.sex = 'F'
-    if max_gen[0] < new_plant.gen:
-        max_gen[0] = (new_plant.gen)
-    if new_plant.gen >= plant_details['mutation_point']:
-        max_gen[0] = 0
-    if new_plant.sex == 'F':
-        total_females += 1
-    if new_plant.sex == 'M':
-        new_plant.location.height = new_plant.location.height // 2
-        new_plant.location.width = new_plant.location.width // 2
-        total_males += 1
-    return new_plant
 
 
 def update_plants(in_males, in_females):
@@ -246,6 +212,8 @@ def update_plants(in_males, in_females):
 
     for p in in_males:
         if p.state == 'Alive':
+            if len(alive_f) + len(alive_m) > MAX_POP * 1.1:
+                p.life_exp = p.life_exp * .05
             for terrain in terrains.terrain_list:
                 if p.location.colliderect(terrain['terrain']):
                     terrains.run_check(p,phenotypes,terrain['type'])
@@ -254,6 +222,8 @@ def update_plants(in_males, in_females):
 
     for p in in_females:
         if p.state == 'Alive':
+            if len(alive_f) + len(alive_m) > MAX_POP * 1.1:
+                p.life_exp = p.life_exp * .05
             for terrain in terrains.terrain_list:
                 if p.location.colliderect(terrain['terrain']):
                     terrains.run_check(p, phenotypes, terrain['type'])
@@ -265,8 +235,6 @@ def update_plants(in_males, in_females):
         if mom.age > plant_details['mm_age']:
             max_mom_age[0] = 0
             if len(alive_f) + len(alive_m) > MAX_POP * 1.5:
-                mom.life_exp = mom.life_exp * .1
-            elif len(alive_f) + len(alive_m) > MAX_POP * 2:
                 mom.state = 'Dead'
             else:
                 if len(alive_f) > MAX_POP * event_triggers['pop_trigger1']:
@@ -278,7 +246,7 @@ def update_plants(in_males, in_females):
 
                 for x in range(0, offspring):
                     pollination = 's'
-                    new_plant = create_crosses(mom, mom, len(alive_f), len(alive_m), 's')
+                    new_plant = bf.create_crosses(mom, mom, len(alive_f), len(alive_m), 's',phenotypes)
                     new_plant.sex = 'F'
                     new_plant_update(new_plant,
                                      len(alive_m),
@@ -340,7 +308,7 @@ def update_plants(in_males, in_females):
                     offspring = 7
 
                 for x in range(0, offspring):
-                    new_plant = new_plant_update(create_crosses(mom, plant, len(alive_f), len(alive_m), 'x'),
+                    new_plant = new_plant_update(bf.create_crosses(mom, plant, len(alive_f), len(alive_m), 'x',phenotypes),
                                                  len(alive_m),
                                                  len(alive_f),
                                                  mom,
@@ -357,7 +325,7 @@ def update_plants(in_males, in_females):
             mplant = alive_m[random.randint(0, len(alive_m))]
             offspring = 4
             for x in range(0, offspring):
-                new_plant = new_plant_update(create_crosses(mplant, mplant, len(alive_f), len(alive_m), 'x'),
+                new_plant = new_plant_update(bf.create_crosses(mplant, mplant, len(alive_f), len(alive_m), 'x',phenotypes),
                                              len(alive_m),
                                              len(alive_f),
                                              mplant,
@@ -467,7 +435,7 @@ def main():
         parent_plants.append(parent)
     while mode == 1:
         for x in range(0, base['start_pop']):
-            new_plant = create_crosses(parent_plants[0], parent_plants[1], x, x, 'x')
+            new_plant = bf.create_crosses(parent_plants[0], parent_plants[1], x, x, 'x',phenotypes)
             if new_plant.sex == 'F':
                 females.append(new_plant)
             else:

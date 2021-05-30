@@ -1,7 +1,7 @@
 MAX_POP = 1000
 MALE_MOVEMENT = 5
-MALE_SPREAD = 20
-FEMALE_SPREAD = 50
+MALE_SPREAD = 10
+FEMALE_SPREAD = 25
 
 mutation_count = 0
 total_males = 0
@@ -35,11 +35,11 @@ event_triggers = {
 }
 
 plant_details = {
-    'm_life_min': 50,
-    'm_life_max': 500,
-    'f_life_min': 500,
-    'f_life_max': 2000,
-    'mm_age': 1900,
+    'm_life_min': 10,
+    'm_life_max': 50,
+    'f_life_min': 50,
+    'f_life_max': 1000,
+    'mm_age': 50000,
     'min_males': MAX_POP * .2,
     'male_movement': MALE_MOVEMENT,
     'male_movement_min': MALE_MOVEMENT * -1,
