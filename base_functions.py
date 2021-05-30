@@ -1,7 +1,14 @@
 import random
 from gen_settings import *
 from plants import plant
-gen_colours = {}
+import pickle
+
+try:
+    infile = open('gen_colours.json', 'rb')
+    gen_colours = pickle.load(infile)
+    infile.close()
+except Exception as e:
+    gen_colours = {}
 
 def colour_pheno(genotype):
     if str(genotype) in gen_colours.keys():
@@ -10,7 +17,11 @@ def colour_pheno(genotype):
     else:
         colour = (random.randint(60, 245), random.randint(60, 245), random.randint(60, 245))
         gen_colours[str(genotype)] = colour
-        pass
+        filename = 'gen_colours.json'
+        outfile = open(filename, 'wb')
+        pickle.dump(gen_colours, outfile)
+        outfile.close()
+
     return colour
 
 total_males = 0
