@@ -24,8 +24,8 @@ SWAMP = pygame.Rect(base["OUTPUT_WIDTH"],
 
 terrain_list = [{"type":"dry2","terrain":DRY_TERRAIN2}]
 # terrain_list = [{"type":"dry1","terrain":DRY_TERRAIN},
-#                 {"type":"wet1","terrain":WET_TERRAIN},
-#                 {"type":"swamp","terrain":SWAMP}]
+#                 {"type":"wet1","terrain":WET_TERRAIN},]
+                # {"type":"swamp","terrain":SWAMP}]
 
 def run_check(plant,phenotypes,type):
     if len(terrain_list) == 0:
@@ -50,7 +50,7 @@ def dry_terrain1(plant,phenotypes):
                     for attrib in phenotypes['codom'][codom].keys():
                         if attrib == 'life_exp':
                             if ('a', 'a') in plant.genotype and ('B', 'B') in plant.genotype:
-                                plant.life_exp = plant.life_exp * 1.5
+                                plant.life_exp = plant.life_exp * 1.1
                             if ('A','A') in plant.genotype:
                                 plant.life_exp = plant.life_exp * .5
 
@@ -63,10 +63,12 @@ def wet_terrain1(plant,phenotypes):
                 if check == codom:
                     for attrib in phenotypes['codom'][codom].keys():
                         if attrib == 'life_exp':
-                            if ('A', 'A') in plant.genotype or ('A', 'a') in plant.genotype or ('a', 'A') in plant.genotype:
+                            if ('A', 'a') in plant.genotype or ('a', 'A') in plant.genotype:
                                 plant.life_exp = plant.life_exp * 1.1
                             if ('b','b') in plant.genotype:
-                                plant.life_exp = plant.life_exp * .5
+                                plant.life_exp = plant.life_exp * .75
+                            if ('A', 'A') in plant.genotype:
+                                plant.life_exp = plant.life_exp * 1.5
 
 def swamp(plant,phenotypes):
     for gt in plant.genotype:

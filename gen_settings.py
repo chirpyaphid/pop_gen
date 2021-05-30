@@ -1,5 +1,5 @@
 import pygame
-MAX_POP = 500
+MAX_POP = 1000
 MALE_MOVEMENT = 20
 MALE_SPREAD = 10
 FEMALE_SPREAD = 100
@@ -10,6 +10,44 @@ total_females = 0
 max_gen = [0]
 max_mom_age = [0]
 
+p1 = [('A', 'A'), ('B', 'b'), ('C', 'c'), ('D', 'd')]#, ('E', 'e'), ('F', 'f')]
+p2 = [('A', 'A'), ('B', 'b'), ('C', 'c'), ('D', 'd')]#, ('E', 'e')]#, ('F', 'f')]
+
+parents = [p1, p2]
+
+phenotypes = {"dom": {
+    "A": "Tall",
+    "B": "Broad Leaf",
+    "C": "Citrus",
+    "D": "Green",
+    "E": "Pine",
+    "F": "THC"
+},
+    "res": {
+        "a": "Short",
+        "b": "Narrow Leaf",
+        "c": "Earthy",
+        "d": "Purple",
+        "e": "Fuel",
+        "f": "CBD"
+    },
+    "codom": {
+        "BB": {"life_exp": 1.2},
+        "AA": {"life_exp": 2},
+        "aa": {"life_exp": 1},
+        "bb": {"life_exp": 1},
+        "aA": {"life_exp": 1},
+        "bB": {"life_exp": 1},
+        "Aa": {"life_exp": 1},
+        "Bb": {"life_exp": 1},
+    },
+    "linked": {
+        "AA": {"height": 2},
+        "aa": {"height": 1},
+        "bb": {"width": 1},
+        "BB": {"width": 3},
+    }
+}
 
 
 base = {
@@ -59,6 +97,6 @@ plant_details = {
     'max_pollination': 50,
     'death': 0,
 
-    'mutation_point': 500,
+    'mutation_point': 20,
 
 }

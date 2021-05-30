@@ -5,6 +5,7 @@ import base_functions as bf
 from gen_settings import *
 from plants import plant
 import terrains as terrains
+from genome_check import check_f_new, check_m_new
 import collections
 
 pygame.init()
@@ -20,46 +21,6 @@ males = []
 females = []
 current_phenos = []
 
-p1 = [('A', 'a'), ('B', 'b'), ('C', 'c'), ('D', 'd')]#, ('E', 'e'), ('F', 'f')]
-p2 = [('A', 'a'), ('B', 'b'), ('C', 'c'), ('D', 'd')]#, ('E', 'e')]#, ('F', 'f')]
-
-parents = [p1, p2]
-
-phenotypes = {"dom": {
-    "A": "Tall",
-    "B": "Broad Leaf",
-    "C": "Citrus",
-    "D": "Green",
-    "E": "Pine",
-    "F": "THC"
-},
-    "res": {
-        "a": "Short",
-        "b": "Narrow Leaf",
-        "c": "Earthy",
-        "d": "Purple",
-        "e": "Fuel",
-        "f": "CBD"
-    },
-    "codom": {
-        "BB": {"life_exp": 1.2},
-        "AA": {"life_exp": 2},
-        "aa": {"life_exp": 1},
-        "bb": {"life_exp": 1},
-        "aA": {"life_exp": 1},
-        "bB": {"life_exp": 1},
-        "Aa": {"life_exp": 1},
-        "Bb": {"life_exp": 1},
-    },
-    "linked": {
-        "AA": {"height": 2},
-        "aa": {"height": 1},
-        "bb": {"width": 1},
-        "BB": {"width": 3},
-    }
-}
-
-
 def draw_window(male_plants, female_plants, parent_plants, genotypes, current_genotypes):
     phenos = []
 
@@ -70,7 +31,7 @@ def draw_window(male_plants, female_plants, parent_plants, genotypes, current_ge
         pygame.draw.rect(WIN, (0, 0, 0), terrains.WET_TERRAIN)
     else:
         pygame.draw.rect(WIN, (200, 20, 20), terrains.DRY_TERRAIN)
-        pygame.draw.rect(WIN, (150, 0, 150), terrains.SWAMP)
+        # pygame.draw.rect(WIN, (150, 0, 150), terrains.SWAMP)
         pygame.draw.rect(WIN, (20, 20, 200), terrains.WET_TERRAIN)
 
     for plant in male_plants:
@@ -192,17 +153,6 @@ def draw_window(male_plants, female_plants, parent_plants, genotypes, current_ge
     pygame.display.update()
 
 
-def a_colour_pheno(genotype):
-    if str(genotype) in gen_colours.keys():
-        colour = gen_colours[str(genotype)]
-        pass
-    else:
-        colour = (random.randint(60, 245), random.randint(60, 245), random.randint(60, 245))
-        gen_colours[str(genotype)] = colour
-        pass
-    return colour
-
-
 def update_plants(in_males, in_females):
     global death, males, females
     alive_m = []
@@ -268,13 +218,13 @@ def update_plants(in_males, in_females):
                 plant.life_exp = 0
                 plant.state = 'Dead'
 
-        plant.location.x += random.randint(plant_details['male_movement_min'], plant_details['male_movement'])
+        plant.location.x += random.randint(-plant.movement, plant.movement)
         while plant.location.x < base['OUTPUT_WIDTH']:
             plant.location.x += MALE_SPREAD
         while plant.location.x + base['P_WIDTH'] > base['WIDTH']:
             plant.location.x += - MALE_SPREAD
 
-        plant.location.y += random.randint(plant_details['male_movement_min'], plant_details['male_movement'])
+        plant.location.y += random.randint(-plant.movement, plant.movement)
         while plant.location.y < 0:
             plant.location.y += MALE_SPREAD
         while plant.location.y + base['P_HEIGHT'] > base['HEIGHT']:
@@ -376,49 +326,11 @@ def new_plant_update(new_plant, alive_m, alive_f, mom, plant):
         new_plant.location.y = plant.location.y + random.randint(plant_details['male_spread_min'],
                                                                  plant_details['male_spread'])
         males.append(new_plant)
-
+    # Genome Check
     if new_plant.sex == 'F':
-        for gt in new_plant.genotype:
-            check = gt[0] + gt[1]
-            if check in phenotypes['codom'].keys():
-
-                for codom in phenotypes['codom'].keys():
-
-                    if check == codom:
-
-                        for attrib in phenotypes['codom'][codom].keys():
-                            if attrib == 'size':
-                                new_plant.location.height = new_plant.location.height * \
-                                                            phenotypes['codom'][codom][
-                                                                attrib]
-                                new_plant.location.width = new_plant.location.width * phenotypes['codom'][codom][
-                                    attrib]
-                            elif attrib == 'height':
-                                new_plant.location.height = new_plant.location.height * \
-                                                            phenotypes['codom'][codom][
-                                                                attrib]
-                            elif attrib == 'width':
-                                new_plant.location.width = new_plant.location.width * phenotypes['codom'][codom][
-                                    attrib]
-                            elif attrib == 'life_exp':
-                                new_plant.life_exp = new_plant.life_exp * phenotypes['codom'][codom][attrib]
-            if check in phenotypes['linked'].keys():
-                for linked in phenotypes['linked'].keys():
-                    if check == linked:
-                        for attrib in phenotypes['linked'][linked].keys():
-                            if attrib == 'size':
-                                new_plant.location.height = new_plant.location.height * phenotypes['linked'][linked][
-                                    attrib]
-                                new_plant.location.width = new_plant.location.width * phenotypes['linked'][linked][
-                                    attrib]
-                            elif attrib == 'height':
-                                new_plant.location.height = new_plant.location.height * phenotypes['linked'][linked][
-                                    attrib]
-                            elif attrib == 'width':
-                                new_plant.location.width = new_plant.location.width * phenotypes['linked'][linked][
-                                    attrib]
-                            elif attrib == 'life_exp':
-                                new_plant.life_exp = new_plant.life_exp * phenotypes['linked'][linked][attrib]
+        new_plant = check_f_new(new_plant)
+    if new_plant.sex == 'M':
+        new_plant = check_m_new(new_plant)
 
     return new_plant
 
