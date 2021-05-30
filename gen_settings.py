@@ -1,4 +1,5 @@
 import pygame
+
 MAX_POP = 1000
 MALE_MOVEMENT = 20
 MALE_SPREAD = 10
