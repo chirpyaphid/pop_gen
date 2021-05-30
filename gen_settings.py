@@ -1,6 +1,6 @@
 import pygame
 
-MAX_POP = 1000
+MAX_POP = 500
 MALE_MOVEMENT = 20
 MALE_SPREAD = 10
 FEMALE_SPREAD = 100
@@ -11,8 +11,8 @@ total_females = 0
 max_gen = [0]
 max_mom_age = [0]
 
-p1 = [('A', 'A'), ('B', 'b'), ('C', 'c'), ('D', 'd')]#, ('E', 'e'), ('F', 'f')]
-p2 = [('A', 'A'), ('B', 'b'), ('C', 'c'), ('D', 'd')]#, ('E', 'e')]#, ('F', 'f')]
+p1 = [('A', 'a'), ('b', 'b'), ('C', 'c'), ('D', 'd')]#, ('E', 'e'), ('F', 'f')]
+p2 = [('A', 'a'), ('B', 'b'), ('C', 'c'), ('D', 'd')]#, ('E', 'e')]#, ('F', 'f')]
 
 parents = [p1, p2]
 
@@ -85,7 +85,7 @@ plant_details = {
     'f_life_min': 500,
     'f_life_max': 5000,
     'mm_age': 50000,
-    'min_males': MAX_POP * .4,
+    'min_males': MAX_POP * .1,
     'male_movement': MALE_MOVEMENT,
     'male_movement_min': MALE_MOVEMENT * -1,
 
@@ -98,6 +98,6 @@ plant_details = {
     'max_pollination': 50,
     'death': 0,
 
-    'mutation_point': 20,
+    'mutation_point': 150,
 
 }
