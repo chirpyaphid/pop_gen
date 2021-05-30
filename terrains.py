@@ -4,28 +4,28 @@ import random
 
 DRY_TERRAIN = pygame.Rect(base["OUTPUT_WIDTH"],
                           0,
-                          base['WIDTH']*.5,
-                          base['HEIGHT']//3)
+                          base['WIDTH']*.25,
+                          base['HEIGHT']*.25)
 
 DRY_TERRAIN2 = pygame.Rect(base["OUTPUT_WIDTH"],
                           base['HEIGHT'] // 3,
-                          base['WIDTH']*.5,
-                          base['HEIGHT'] // 3)
+                          base['WIDTH']*.25,
+                          base['HEIGHT'] *.25)
 
 WET_TERRAIN = pygame.Rect(base["OUTPUT_WIDTH"],
                           2*(base['HEIGHT'] // 3),
-                          base['WIDTH']*.5,
-                          base['HEIGHT'] // 3)
+                          base['WIDTH']*.25,
+                          base['HEIGHT'] *.25)
 
 SWAMP = pygame.Rect(base["OUTPUT_WIDTH"],
                           base['HEIGHT'] // 3,
-                          base['WIDTH']*.5,
-                          base['HEIGHT'] // 3)
+                          base['WIDTH']*.25,
+                          base['HEIGHT'] *.25)
 
-# terrain_list = [{"type":"dry2","terrain":DRY_TERRAIN2}]
-terrain_list = [{"type":"dry1","terrain":DRY_TERRAIN},
-                {"type":"wet1","terrain":WET_TERRAIN},
-                {"type":"swamp","terrain":SWAMP}]
+terrain_list = [{"type":"dry2","terrain":DRY_TERRAIN2}]
+# terrain_list = [{"type":"dry1","terrain":DRY_TERRAIN},
+#                 {"type":"wet1","terrain":WET_TERRAIN},
+#                 {"type":"swamp","terrain":SWAMP}]
 
 def run_check(plant,phenotypes,type):
     if len(terrain_list) == 0:
