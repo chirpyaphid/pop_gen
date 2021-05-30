@@ -20,8 +20,8 @@ males = []
 females = []
 current_phenos = []
 
-p1 = [('A', 'a'), ('B', 'b'), ('C', 'c')]  # , ('D', 'D')]  # , ('E', 'e'), ('F', 'f')]
-p2 = [('A', 'a'), ('B', 'b'), ('C', 'c')]  # , ('F', 'F')]  # , ('E', 'e'), ('F', 'f')]
+p1 = [('A', 'a'), ('B', 'b'), ('C', 'c'), ('D', 'd')]#, ('E', 'e'), ('F', 'f')]
+p2 = [('A', 'a'), ('B', 'b'), ('C', 'c'), ('D', 'd')]#, ('E', 'e')]#, ('F', 'f')]
 
 parents = [p1, p2]
 
@@ -153,13 +153,14 @@ def draw_window(male_plants, female_plants, parent_plants, genotypes, current_ge
                 pass
     # print(gen_colours)
     if mode == 3:
+        pygame.draw.rect(WIN, (0, 0, 0), END_BACK)
         if base['OUTPUT_WIDTH'] == 0:
             x = 0
         x += 10
-        t_males = FONT.render(f"Total Males: {total_males} ", True, base['YELLOW'])
+        t_males = FONT.render(f"Total Males: {bf.total_males} ", True, base['YELLOW'])
         WIN.blit(t_males, [5, x])
         x += 15
-        t_males = FONT.render(f"Total Females: {total_females} ", True, base['YELLOW'])
+        t_males = FONT.render(f"Total Females: {bf.total_females} ", True, base['YELLOW'])
         WIN.blit(t_males, [5, x])
         x += 15
 
@@ -202,9 +203,6 @@ def a_colour_pheno(genotype):
     return colour
 
 
-
-
-
 def update_plants(in_males, in_females):
     global death, males, females
     alive_m = []
@@ -216,7 +214,7 @@ def update_plants(in_males, in_females):
                 p.life_exp = p.life_exp * .05
             for terrain in terrains.terrain_list:
                 if p.location.colliderect(terrain['terrain']):
-                    terrains.run_check(p,phenotypes,terrain['type'])
+                    terrains.run_check(p, phenotypes, terrain['type'])
                 p.age += 1
                 alive_m.append(p)
 
@@ -229,7 +227,6 @@ def update_plants(in_males, in_females):
                     terrains.run_check(p, phenotypes, terrain['type'])
                 p.age += 1
             alive_f.append(p)
-
 
     for mom in alive_f:
         if mom.age > plant_details['mm_age']:
@@ -246,7 +243,7 @@ def update_plants(in_males, in_females):
 
                 for x in range(0, offspring):
                     pollination = 's'
-                    new_plant = bf.create_crosses(mom, mom, len(alive_f), len(alive_m), 's',phenotypes)
+                    new_plant = bf.create_crosses(mom, mom, len(alive_f), len(alive_m), 's', phenotypes)
                     new_plant.sex = 'F'
                     new_plant_update(new_plant,
                                      len(alive_m),
@@ -255,8 +252,7 @@ def update_plants(in_males, in_females):
                                      mom)
                     for terrain in terrains.terrain_list:
                         if new_plant.location.colliderect(terrain['terrain']):
-                            terrains.run_check(new_plant,phenotypes,terrain['type'])
-
+                            terrains.run_check(new_plant, phenotypes, terrain['type'])
 
                 mom.pollination_count += 1
                 if mom.pollination_count >= mom.max_pollination_count:
@@ -308,11 +304,12 @@ def update_plants(in_males, in_females):
                     offspring = 7
 
                 for x in range(0, offspring):
-                    new_plant = new_plant_update(bf.create_crosses(mom, plant, len(alive_f), len(alive_m), 'x',phenotypes),
-                                                 len(alive_m),
-                                                 len(alive_f),
-                                                 mom,
-                                                 plant)
+                    new_plant = new_plant_update(
+                        bf.create_crosses(mom, plant, len(alive_f), len(alive_m), 'x', phenotypes),
+                        len(alive_m),
+                        len(alive_f),
+                        mom,
+                        plant)
 
                 plant.state = 'Dead'
                 mom.pollination_count += 1
@@ -325,11 +322,12 @@ def update_plants(in_males, in_females):
             mplant = alive_m[random.randint(0, len(alive_m))]
             offspring = 4
             for x in range(0, offspring):
-                new_plant = new_plant_update(bf.create_crosses(mplant, mplant, len(alive_f), len(alive_m), 'x',phenotypes),
-                                             len(alive_m),
-                                             len(alive_f),
-                                             mplant,
-                                             mplant)
+                new_plant = new_plant_update(
+                    bf.create_crosses(mplant, mplant, len(alive_f), len(alive_m), 'x', phenotypes),
+                    len(alive_m),
+                    len(alive_f),
+                    mplant,
+                    mplant)
             mplant.state = 'Dead'
         except Exception as e:
             pass
@@ -435,7 +433,7 @@ def main():
         parent_plants.append(parent)
     while mode == 1:
         for x in range(0, base['start_pop']):
-            new_plant = bf.create_crosses(parent_plants[0], parent_plants[1], x, x, 'x',phenotypes)
+            new_plant = bf.create_crosses(parent_plants[0], parent_plants[1], x, x, 'x', phenotypes)
             if new_plant.sex == 'F':
                 females.append(new_plant)
             else:
