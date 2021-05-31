@@ -1,18 +1,34 @@
 import pygame
 
-MAX_POP = 500
+MAX_POP = 1000
 MALE_MOVEMENT = 20
 MALE_SPREAD = 10
 FEMALE_SPREAD = 100
 
-mutation_count = 0
-total_males = 0
-total_females = 0
-max_gen = [0]
-max_mom_age = [0]
+base = {
+    "WIDTH": 800,
+    "HEIGHT": 800,
+    "OUTPUT_WIDTH": 0,
+    "PLANT_AREA_WIDTH": 0,
+    "FINAL_WIDTH": 450,
+    "FPS": 60,
+    "WHITE": (255, 255, 255),
+    "BLACK": (0, 0, 0),
+    "RED": (255, 0, 0),
+    "BLUE": (0, 0, 255),
+    "YELLOW": (255, 255, 0),
+    "GREEN": (0, 255, 0),
+    "P_HEIGHT": 4,
+    "P_WIDTH": 4,
+    "SEX": ('M', 'F'),
+    "max_pop": MAX_POP,
+    "start_pop": int(MAX_POP * .5),
+}
 
-p1 = [('A', 'a'), ('b', 'b'), ('C', 'c'), ('D', 'd')]#, ('E', 'e'), ('F', 'f')]
-p2 = [('A', 'a'), ('B', 'b'), ('C', 'c'), ('D', 'd')]#, ('E', 'e')]#, ('F', 'f')]
+END_BACK = pygame.Rect(0, 0, base['HEIGHT'], base['FINAL_WIDTH'])
+
+p1 = [('A', 'a'), ('b', 'b'), ('C', 'C'), ('D', 'd')]  # , ('E', 'e'), ('F', 'f')]
+p2 = [('A', 'a'), ('B', 'b'), ('C', 'c'), ('D', 'D')]  # , ('E', 'e')]#, ('F', 'f')]
 
 parents = [p1, p2]
 
@@ -50,29 +66,6 @@ phenotypes = {"dom": {
     }
 }
 
-
-base = {
-    "WIDTH": 1000,
-    "HEIGHT": 1000,
-    "OUTPUT_WIDTH": 0,
-    "PLANT_AREA_WIDTH": 0,
-    "FINAL_WIDTH":450,
-    "FPS": 60,
-    "WHITE": (255, 255, 255),
-    "BLACK": (0, 0, 0),
-    "RED": (255, 0, 0),
-    "BLUE": (0, 0, 255),
-    "YELLOW": (255, 255, 0),
-    "GREEN": (0, 255, 0),
-    "P_HEIGHT": 4,
-    "P_WIDTH": 4,
-    "SEX": ('M', 'F'),
-    "max_pop": MAX_POP,
-    "start_pop": int(MAX_POP * .5),
-}
-
-END_BACK = pygame.Rect(0,0,base['HEIGHT'],base['FINAL_WIDTH'])
-
 event_triggers = {
     "pop_trigger1": .50,
     "pop_trigger2": .25,
@@ -82,15 +75,17 @@ event_triggers = {
 plant_details = {
     'm_life_min': 500,
     'm_life_max': 1500,
-    'f_life_min': 500,
-    'f_life_max': 5000,
-    'mm_age': 50000,
+
     'min_males': MAX_POP * .1,
     'male_movement': MALE_MOVEMENT,
     'male_movement_min': MALE_MOVEMENT * -1,
 
     'male_spread': MALE_SPREAD,
     'male_spread_min': MALE_SPREAD * -1,
+
+    'f_life_min': 500,
+    'f_life_max': 5000,
+    'mm_age': 50000,
 
     'female_spread': FEMALE_SPREAD,
     'female_spread_min': FEMALE_SPREAD * -1,
@@ -101,3 +96,10 @@ plant_details = {
     'mutation_point': 150,
 
 }
+
+# Leave these alone
+mutation_count = 0
+total_males = 0
+total_females = 0
+max_gen = [0]
+max_mom_age = [0]

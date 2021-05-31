@@ -1,6 +1,9 @@
 import random
 import base_functions as bf
 from plants import plant
+import pygame
+
+pygame.display.set_caption(f"Sim Window ID: {random.randint(0,10)}")
 
 from window_updates import *
 from update_plants_functions import *
@@ -225,8 +228,11 @@ def main():
 
         if mode == 3:
             try:
-                draw_window(male_plants, female_plants, parent_plants, genotypes, current_genotypes,temp,rh)
+
+                draw_window(male_plants, female_plants, parent_plants, genotypes, current_genotypes,current_phenos,temp,rh)
             except Exception as e:
+                rh = 0
+                draw_window(male_plants, female_plants, parent_plants, genotypes, current_genotypes,current_phenos,temp,rh)
                 print(str(e))
                 pass
 

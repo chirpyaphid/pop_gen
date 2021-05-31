@@ -10,8 +10,6 @@ gen_colours = bf.gen_colours
 
 WIN = pygame.display.set_mode((base['WIDTH'], base['HEIGHT']))
 FONT = pygame.font.SysFont(None, 20)
-rh = 0
-
 
 def draw_window(
         male_plants,
@@ -21,12 +19,15 @@ def draw_window(
         current_genotypes,
         current_phenos,
         temp,
-        rh,
+        rh=65,
 ):
     phenos = []
-
+    # print(current_phenos)
     p_types = collections.Counter(phenos)
-    c_phenos = dict(set(current_phenos))
+    try:
+        c_phenos = dict(set(current_phenos))
+    except Exception as e:
+        c_phenos = current_phenos
 
     WIN.fill(base['BLACK'])
     if len(terrains.terrain_list) == 1:
