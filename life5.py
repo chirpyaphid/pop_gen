@@ -115,8 +115,9 @@ def update_plants(in_males, in_females):
                     offspring = 7
 
                 for x in range(0, offspring):
+                    new_plant,mutation_count = bf.create_crosses(mom, plant, len(alive_f), len(alive_m), 'x', phenotypes)
                     new_plant = new_plant_update(
-                        bf.create_crosses(mom, plant, len(alive_f), len(alive_m), 'x', phenotypes),
+                        new_plant,
                         len(alive_m),
                         len(alive_f),
                         mom,
@@ -180,7 +181,7 @@ def main():
         parent_plants.append(parent)
     while mode == 1:
         for x in range(0, base['start_pop']):
-            new_plant = bf.create_crosses(parent_plants[0], parent_plants[1], x, x, 'x', phenotypes)
+            new_plant,mutation_count = bf.create_crosses(parent_plants[0], parent_plants[1], x, x, 'x', phenotypes)
             if new_plant.sex == 'F':
                 females.append(new_plant)
             else:

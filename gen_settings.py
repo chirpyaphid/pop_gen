@@ -1,13 +1,13 @@
 import pygame
 
-MAX_POP = 2000
-MALE_MOVEMENT = 20
+MAX_POP = 1000
+MALE_MOVEMENT = 16
 MALE_SPREAD = 10
 FEMALE_SPREAD = 100
 
 base = {
-    "WIDTH": 1400,
-    "HEIGHT": 800,
+    "WIDTH": 1000,
+    "HEIGHT": 1000,
     "OUTPUT_WIDTH": 0,
     "PLANT_AREA_WIDTH": 0,
     "FINAL_WIDTH": 450,
@@ -18,11 +18,11 @@ base = {
     "BLUE": (0, 0, 255),
     "YELLOW": (255, 255, 0),
     "GREEN": (0, 255, 0),
-    "P_HEIGHT": 4,
-    "P_WIDTH": 4,
+    "P_HEIGHT": 6,
+    "P_WIDTH": 6,
     "SEX": ('M', 'F'),
     "max_pop": MAX_POP,
-    "start_pop": int(MAX_POP * .5),
+    "start_pop": int(MAX_POP * .25),
 }
 
 END_BACK = pygame.Rect(0, 0, base['HEIGHT'], base['FINAL_WIDTH'])
@@ -67,14 +67,14 @@ phenotypes = {"dom": {
 }
 
 event_triggers = {
-    "pop_trigger1": .50,
-    "pop_trigger2": .25,
+    "pop_trigger1": .07,
+    "pop_trigger2": .06,
     "pop_trigger3": .05,
 }
 
 plant_details = {
-    'm_life_min': 500,
-    'm_life_max': 1500,
+    'm_life_min': 4000,
+    'm_life_max': 10000,
 
     'min_males': MAX_POP * .1,
     'male_movement': MALE_MOVEMENT,
@@ -90,10 +90,10 @@ plant_details = {
     'female_spread': FEMALE_SPREAD,
     'female_spread_min': FEMALE_SPREAD * -1,
 
-    'max_pollination': 50,
+    'max_pollination': 10,
     'death': 0,
 
-    'mutation_point': 150,
+    'mutation_point': 350,
 
 }
 

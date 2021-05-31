@@ -58,6 +58,9 @@ def create_crosses(p1, p2, females, males, pollination,phenotypes):
 
     if pollination == 's':
         new_plant.sex = 'F'
+    else:
+        if males <= plant_details['min_males']:
+            new_plant.sex = 'M'
     if max_gen[0] < new_plant.gen:
         max_gen[0] = (new_plant.gen)
     if new_plant.gen >= plant_details['mutation_point']:
@@ -68,4 +71,4 @@ def create_crosses(p1, p2, females, males, pollination,phenotypes):
         new_plant.location.height = new_plant.location.height // 2
         new_plant.location.width = new_plant.location.width // 2
         total_males += 1
-    return new_plant
+    return new_plant,mutation_count
