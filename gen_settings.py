@@ -1,12 +1,12 @@
 import pygame
 
-MAX_POP = 1000
+MAX_POP = 2000
 MALE_MOVEMENT = 20
 MALE_SPREAD = 10
 FEMALE_SPREAD = 100
 
 base = {
-    "WIDTH": 800,
+    "WIDTH": 1400,
     "HEIGHT": 800,
     "OUTPUT_WIDTH": 0,
     "PLANT_AREA_WIDTH": 0,

@@ -102,6 +102,8 @@ def check_f_new(new_plant, temp, rh):
                 elif temp < 10:
                     new_plant.life_exp = new_plant.life_exp * 0
 
+            if tuple(['C', 'c']) in new_plant.genotype:
+                new_plant.life_exp = new_plant.life_exp * 1.5
     except Exception as e:
         pass
 
@@ -174,6 +176,10 @@ def check_m_new(new_plant, temp, rh):
                     new_plant.life_exp = new_plant.life_exp * .4
                 elif temp < 10:
                     new_plant.life_exp = new_plant.life_exp * 0
+
+            if tuple(['C', 'c']) in new_plant.genotype:
+                new_plant.life_exp = new_plant.life_exp * 1.5
+
     except Exception as e:
         pass
 
