@@ -10,8 +10,6 @@ gen_colours = bf.gen_colours
 
 WIN = pygame.display.set_mode((base['WIDTH'], base['HEIGHT']))
 FONT = pygame.font.SysFont(None, 20)
-rh = 0
-
 
 def draw_window(
         male_plants,
@@ -21,12 +19,16 @@ def draw_window(
         current_genotypes,
         current_phenos,
         temp,
-        rh,
+        rh=65,
+        mutation_count = mutation_count
 ):
     phenos = []
-
+    # print(current_phenos)
     p_types = collections.Counter(phenos)
-    c_phenos = dict(set(current_phenos))
+    try:
+        c_phenos = dict(set(current_phenos))
+    except Exception as e:
+        c_phenos = current_phenos
 
     WIN.fill(base['BLACK'])
     if len(terrains.terrain_list) == 1:
@@ -64,18 +66,31 @@ def draw_window(
         ambient_text = FONT.render(f"Temp: {temp} / %RH: {rh}", True, base['WHITE'])
         WIN.blit(ambient_text, [5, x])
         x += 25
-
+        m_count = FONT.render(f"Males: {len(male_plants)}", True, base['WHITE'])
+        WIN.blit(m_count, [5, x])
+        x += 20
         m_count = FONT.render(f"Males TD: {bf.total_males}", True, base['WHITE'])
         WIN.blit(m_count, [5, x])
         x += 25
+
+        f_count = FONT.render(f"Females: {len(female_plants)}", True, base['WHITE'])
+        WIN.blit(f_count, [5, x])
+        x += 20
         f_count = FONT.render(f"Females TD: {bf.total_females}", True, base['WHITE'])
         WIN.blit(f_count, [5, x])
         x += 25
+
         p_count = FONT.render(f"Phenos: {len(c_phenos)}", True, base['YELLOW'])
         WIN.blit(p_count, [5, x])
         x += 15
         g_count = FONT.render(f"Genotypes: {genotypes}", True, base['WHITE'])
         WIN.blit(g_count, [5, x])
+        x +=15
+        max_gen_text = FONT.render(f"Max Gen: {max_gen}", True, base['YELLOW'])
+        WIN.blit(max_gen_text, [5, x])
+        # x += 15
+        # max_mutations_text = FONT.render(f"Max Mutations: {mutation_count}", True, base['YELLOW'])
+        # WIN.blit(max_mutations_text, [5, x])
 
     if base['OUTPUT_WIDTH'] != 0:
         x = 25

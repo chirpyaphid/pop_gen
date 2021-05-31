@@ -1,6 +1,9 @@
 import random
 import base_functions as bf
 from plants import plant
+import pygame
+
+pygame.display.set_caption(f"Sim Window ID: {random.randint(0,10)}")
 
 from window_updates import *
 from update_plants_functions import *
@@ -112,8 +115,9 @@ def update_plants(in_males, in_females):
                     offspring = 7
 
                 for x in range(0, offspring):
+                    new_plant,mutation_count = bf.create_crosses(mom, plant, len(alive_f), len(alive_m), 'x', phenotypes)
                     new_plant = new_plant_update(
-                        bf.create_crosses(mom, plant, len(alive_f), len(alive_m), 'x', phenotypes),
+                        new_plant,
                         len(alive_m),
                         len(alive_f),
                         mom,
@@ -177,7 +181,7 @@ def main():
         parent_plants.append(parent)
     while mode == 1:
         for x in range(0, base['start_pop']):
-            new_plant = bf.create_crosses(parent_plants[0], parent_plants[1], x, x, 'x', phenotypes)
+            new_plant,mutation_count = bf.create_crosses(parent_plants[0], parent_plants[1], x, x, 'x', phenotypes)
             if new_plant.sex == 'F':
                 females.append(new_plant)
             else:
@@ -225,8 +229,11 @@ def main():
 
         if mode == 3:
             try:
-                draw_window(male_plants, female_plants, parent_plants, genotypes, current_genotypes,temp,rh)
+
+                draw_window(male_plants, female_plants, parent_plants, genotypes, current_genotypes,current_phenos,temp,rh)
             except Exception as e:
+                rh = 0
+                draw_window(male_plants, female_plants, parent_plants, genotypes, current_genotypes,current_phenos,temp,rh)
                 print(str(e))
                 pass
 
