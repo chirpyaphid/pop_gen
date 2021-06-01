@@ -37,74 +37,80 @@ def check_f_new(new_plant, temp, rh):
     # return new_plant
     try:
         if ('b', 'b') in new_plant.genotype and ('A', 'A') in new_plant.genotype:
+            pass
             new_plant.location.height = new_plant.location.height * 4
             new_plant.location.width = new_plant.location.width * .25
-            new_plant.max_pollination_count = 100
-            if temp >= 25 <= 28:
-                new_plant.life_exp = new_plant.life_exp * 1.5
-            elif temp > 28 <= 33:
-                new_plant.life_exp = new_plant.life_exp * 1.2
-            elif temp > 33:
-                new_plant.life_exp = new_plant.life_exp * .9
-            elif temp < 23:
-                new_plant.life_exp = new_plant.life_exp * .9
-            elif temp < 10:
-                new_plant.life_exp = new_plant.life_exp * 0
+            # new_plant.max_pollination_count = 100
+
+            # if temp >= 25 <= 28:
+            #     new_plant.life_exp = new_plant.life_exp * 1.5
+            # elif temp > 28 <= 33:
+            #     new_plant.life_exp = new_plant.life_exp * 1.2
+            # elif temp > 33:
+            #     new_plant.life_exp = new_plant.life_exp * .9
+            # elif temp < 23:
+            #     new_plant.life_exp = new_plant.life_exp * .9
+            # elif temp < 10:
+            #     new_plant.life_exp = new_plant.life_exp * 0
         else:
             if ('A', 'A') in new_plant.genotype:
                 new_plant.location.height = new_plant.location.height * 3
-                if temp >= 25 <= 30:
-                    new_plant.life_exp = new_plant.life_exp * 1.2
-                elif temp > 30:
-                    new_plant.life_exp = new_plant.life_exp * .9
-                elif temp > 35:
-                    new_plant.life_exp = new_plant.life_exp * .5
-                elif temp < 22:
-                    new_plant.life_exp = new_plant.life_exp * .4
-                elif temp < 10:
-                    new_plant.life_exp = new_plant.life_exp * 0
+                new_plant.life_exp = new_plant.life_exp * 1.08
+                # if temp >= 25 <= 30:
+                #     new_plant.life_exp = new_plant.life_exp * 1.2
+                # elif temp > 30:
+                #     new_plant.life_exp = new_plant.life_exp * .9
+                # elif temp > 35:
+                #     new_plant.life_exp = new_plant.life_exp * .5
+                # elif temp < 22:
+                #     new_plant.life_exp = new_plant.life_exp * .4
+                # elif temp < 10:
+                #     new_plant.life_exp = new_plant.life_exp * 0
 
             if ('a', 'a') in new_plant.genotype:
-                new_plant.location.height = new_plant.location.height * .5
-                if temp >= 22 <= 27:
-                    new_plant.life_exp = new_plant.life_exp * 1.2
-                elif temp > 27:
-                    new_plant.life_exp = new_plant.life_exp * .6
-                elif temp > 35:
-                    new_plant.life_exp = new_plant.life_exp * 0
-                elif temp < 22:
-                    new_plant.life_exp = new_plant.life_exp * .8
-                elif temp < 10:
-                    new_plant.life_exp = new_plant.life_exp * .5
+                pass
+                new_plant.location.height = new_plant.location.height * .25
+                # if temp >= 22 <= 27:
+                #     new_plant.life_exp = new_plant.life_exp * 1.2
+                # elif temp > 27:
+                #     new_plant.life_exp = new_plant.life_exp * .6
+                # elif temp > 35:
+                #     new_plant.life_exp = new_plant.life_exp * 0
+                # elif temp < 22:
+                #     new_plant.life_exp = new_plant.life_exp * .8
+                # elif temp < 10:
+                #     new_plant.life_exp = new_plant.life_exp * .5
 
             if ('B', 'B') in new_plant.genotype:
-                new_plant.location.width = new_plant.location.width * 2
-                if temp >= 22 <= 27:
-                    new_plant.life_exp = new_plant.life_exp * 1.2
-                elif temp > 27:
-                    new_plant.life_exp = new_plant.life_exp * .6
-                elif temp > 35:
-                    new_plant.life_exp = new_plant.life_exp * 0
-                elif temp < 22:
-                    new_plant.life_exp = new_plant.life_exp * .8
-                elif temp < 10:
-                    new_plant.life_exp = new_plant.life_exp * .5
+                new_plant.location.width = new_plant.location.width * 1.5
+                # new_plant.life_exp = new_plant.life_exp * .5
+                # if temp >= 22 <= 27:
+                #     new_plant.life_exp = new_plant.life_exp * 1.2
+                # elif temp > 27:
+                #     new_plant.life_exp = new_plant.life_exp * .6
+                # elif temp > 35:
+                #     new_plant.life_exp = new_plant.life_exp * 0
+                # elif temp < 22:
+                #     new_plant.life_exp = new_plant.life_exp * .8
+                # elif temp < 10:
+                #     new_plant.life_exp = new_plant.life_exp * .5
 
             if ('b', 'b') in new_plant.genotype:
                 new_plant.location.width = new_plant.location.width * .5
-                if temp >= 25 <= 30:
-                    new_plant.life_exp = new_plant.life_exp * 1.2
-                elif temp > 30:
-                    new_plant.life_exp = new_plant.life_exp * .9
-                elif temp > 35:
-                    new_plant.life_exp = new_plant.life_exp * .5
-                elif temp < 22:
-                    new_plant.life_exp = new_plant.life_exp * .4
-                elif temp < 10:
-                    new_plant.life_exp = new_plant.life_exp * 0
+                new_plant.life_exp = new_plant.life_exp * 1.09
+                # if temp >= 25 <= 30:
+                #     new_plant.life_exp = new_plant.life_exp * 1.2
+                # elif temp > 30:
+                #     new_plant.life_exp = new_plant.life_exp * .9
+                # elif temp > 35:
+                #     new_plant.life_exp = new_plant.life_exp * .5
+                # elif temp < 22:
+                #     new_plant.life_exp = new_plant.life_exp * .4
+                # elif temp < 10:
+                #     new_plant.life_exp = new_plant.life_exp * 0
 
-            # if ('C', 'c') in new_plant.genotype:
-            #     new_plant.life_exp = new_plant.life_exp * 1.5
+            if ('C', 'c') in new_plant.genotype:
+                new_plant.life_exp = new_plant.life_exp * 1.01
     except Exception as e:
         pass
 

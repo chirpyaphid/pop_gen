@@ -24,8 +24,8 @@ SWAMP = pygame.Rect(base["OUTPUT_WIDTH"],
 
 terrain_list = [{"type":"dry2","terrain":DRY_TERRAIN2}]
 # terrain_list = [{"type":"dry1","terrain":DRY_TERRAIN},
-#                 {"type":"wet1","terrain":WET_TERRAIN},]
-                # {"type":"swamp","terrain":SWAMP}]
+#                 {"type":"wet1","terrain":WET_TERRAIN},
+#                 {"type":"swamp","terrain":SWAMP}]
 
 def run_check(plant,phenotypes,type):
     if len(terrain_list) == 0:

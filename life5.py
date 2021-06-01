@@ -168,9 +168,6 @@ def update_plants(in_males, in_females):
     return alive_m, alive_f, len(genotypes), genotypes
 
 
-
-
-
 def main():
     global mode, death,temp,rh
     parent_plants = []
@@ -220,7 +217,7 @@ def main():
         if mode == 2:
             male_plants, female_plants, genotypes, current_genotypes = update_plants(males, females)
             draw_window(male_plants, female_plants, parent_plants, genotypes, current_genotypes,current_phenos,temp,rh)
-            if genotypes == 1 or len(male_plants) == 0:
+            if genotypes == 0 or len(male_plants) < 0:
                 mode = 3
             try:
                 draw_window(male_plants, female_plants, parent_plants, genotypes, current_genotypes,current_phenos,temp,rh)
