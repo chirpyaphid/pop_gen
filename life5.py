@@ -3,7 +3,7 @@ import base_functions as bf
 from plants import plant
 import pygame
 
-pygame.display.set_caption(f"Sim Window ID: {random.randint(0,10)}")
+pygame.display.set_caption(f"Sim Window ID: {random.randint(0, 10)}")
 
 from window_updates import *
 from update_plants_functions import *
@@ -13,6 +13,7 @@ females = []
 current_phenos = []
 temp = 25
 rh = 65
+
 
 def update_plants(in_males, in_females):
     global death, males, females
@@ -46,21 +47,22 @@ def update_plants(in_males, in_females):
                 mom.state = 'Dead'
             else:
                 if len(alive_f) > MAX_POP * event_triggers['pop_trigger1']:
-                    offspring = 2
+                    offspring = 1
+                elif len(alive_f) < MAX_POP * event_triggers['pop_trigger1'] > MAX_POP * event_triggers['pop_trigger2']:
+                    offspring = 3
                 elif len(alive_f) < MAX_POP * event_triggers['pop_trigger2']:
                     offspring = 20
-                else:
-                    offspring = 50
 
                 for x in range(0, offspring):
-                    pollination = 's'
-                    new_plant = bf.create_crosses(mom, mom, len(alive_f), len(alive_m), 's', phenotypes)
+                    new_plant, _ = bf.create_crosses(mom, mom, len(alive_f), len(alive_m), 's', phenotypes)
                     new_plant.sex = 'F'
+                    females.append(new_plant)
                     new_plant_update(new_plant,
                                      len(alive_m),
                                      len(alive_f),
-                                     mom,
-                                     mom)
+                                     mom, mom,
+                                     males,females,
+                                     temp, rh)
                     for terrain in terrains.terrain_list:
                         if new_plant.location.colliderect(terrain['terrain']):
                             terrains.run_check(new_plant, phenotypes, terrain['type'])
@@ -96,7 +98,7 @@ def update_plants(in_males, in_females):
             if len(alive_f) <= 5:
                 pass
             else:
-                if mom.life_exp > 1:
+                if mom.life_exp >= 1:
                     mom.life_exp -= 1
                 else:
                     mom.life_exp = 0
@@ -115,19 +117,34 @@ def update_plants(in_males, in_females):
                     offspring = 7
 
                 for x in range(0, offspring):
-                    new_plant,mutation_count = bf.create_crosses(mom, plant, len(alive_f), len(alive_m), 'x', phenotypes)
+                    new_plant, mutation_count = bf.create_crosses(mom, plant, len(alive_f), len(alive_m), 'x',
+                                                                  phenotypes)
                     new_plant = new_plant_update(
                         new_plant,
                         len(alive_m),
                         len(alive_f),
                         mom,
-                        plant,males,females,temp,rh)
+                        plant, males, females, temp, rh)
+                    try:
+                        if new_plant.sex == 'M':
+                            males.append(new_plant)
+                        else:
+                            females.append(new_plant)
+                    except Exception as e:
+                        pass
 
-                plant.state = 'Dead'
+                plant.pollination_count += 1
                 mom.pollination_count += 1
                 if mom.pollination_count > mom.max_pollination_count:
                     mom.state = 'Dead'
-                # print(mom.offspring,mom.state)
+
+                if plant.pollination_count >= 1:
+                    plant.state = 'Dead'
+
+                if new_plant.sex == 'M':
+                    males.append(new_plant)
+                else:
+                    females.append(new_plant)
 
     if len(alive_m) < plant_details['min_males']:
         try:
@@ -142,8 +159,9 @@ def update_plants(in_males, in_females):
                     mplant,
                     males,
                     females,
-                temp,
-                rh)
+                    temp,
+                    rh)
+            males.append(new_plant)
             mplant.state = 'Dead'
         except Exception as e:
             pass
@@ -151,6 +169,7 @@ def update_plants(in_males, in_females):
     alive_m = []
     alive_f = []
     genotypes = []
+
     for p in males:
         if p.state == 'Alive':
             alive_m.append(p)
@@ -169,7 +188,7 @@ def update_plants(in_males, in_females):
 
 
 def main():
-    global mode, death,temp,rh
+    global mode, death, temp, rh
     parent_plants = []
     plants = []
     start = 1
@@ -178,7 +197,7 @@ def main():
         parent_plants.append(parent)
     while mode == 1:
         for x in range(0, base['start_pop']):
-            new_plant,mutation_count = bf.create_crosses(parent_plants[0], parent_plants[1], x, x, 'x', phenotypes)
+            new_plant, mutation_count = bf.create_crosses(parent_plants[0], parent_plants[1], x, x, 'x', phenotypes)
             if new_plant.sex == 'F':
                 females.append(new_plant)
             else:
@@ -216,28 +235,37 @@ def main():
 
         if mode == 2:
             male_plants, female_plants, genotypes, current_genotypes = update_plants(males, females)
-            draw_window(male_plants, female_plants, parent_plants, genotypes, current_genotypes,current_phenos,temp,rh)
-            if genotypes == 0 or len(male_plants) < 0:
+            draw_window(male_plants, female_plants, parent_plants, genotypes, current_genotypes, current_phenos, temp,
+                        rh)
+            if genotypes == 0 or len(male_plants) == 0 or len(female_plants) == 0:
                 mode = 3
+                # male_plants = []
+                # female_plants = []
+                # main()
+
             try:
-                draw_window(male_plants, female_plants, parent_plants, genotypes, current_genotypes,current_phenos,temp,rh)
+                draw_window(male_plants, female_plants, parent_plants, genotypes, current_genotypes, current_phenos,
+                            temp, rh)
             except Exception as e:
                 pass
 
         if mode == 3:
             try:
 
-                draw_window(male_plants, female_plants, parent_plants, genotypes, current_genotypes,current_phenos,temp,rh)
+                draw_window(male_plants, female_plants, parent_plants, genotypes, current_genotypes, current_phenos,
+                            temp, rh)
             except Exception as e:
                 rh = 0
-                draw_window(male_plants, female_plants, parent_plants, genotypes, current_genotypes,current_phenos,temp,rh)
+                draw_window(male_plants, female_plants, parent_plants, genotypes, current_genotypes, current_phenos,
+                            temp, rh)
                 print(str(e))
                 pass
 
         if mode == 0:
-            draw_window(males, females, parent_plants, 0, [], [],temp,rh)
+            draw_window(males, females, parent_plants, 0, [], [], temp, rh)
 
     pygame.quit()
+
 
 if __name__ == "__main__":
     main()

@@ -55,7 +55,7 @@ def check_f_new(new_plant, temp, rh):
         else:
             if ('A', 'A') in new_plant.genotype:
                 new_plant.location.height = new_plant.location.height * 3
-                new_plant.life_exp = new_plant.life_exp * 1.08
+                # new_plant.life_exp = new_plant.life_exp * 1.08
                 # if temp >= 25 <= 30:
                 #     new_plant.life_exp = new_plant.life_exp * 1.2
                 # elif temp > 30:
@@ -97,7 +97,7 @@ def check_f_new(new_plant, temp, rh):
 
             if ('b', 'b') in new_plant.genotype:
                 new_plant.location.width = new_plant.location.width * .5
-                new_plant.life_exp = new_plant.life_exp * 1.09
+                # new_plant.life_exp = new_plant.life_exp * 1.09
                 # if temp >= 25 <= 30:
                 #     new_plant.life_exp = new_plant.life_exp * 1.2
                 # elif temp > 30:
@@ -109,8 +109,8 @@ def check_f_new(new_plant, temp, rh):
                 # elif temp < 10:
                 #     new_plant.life_exp = new_plant.life_exp * 0
 
-            if ('C', 'c') in new_plant.genotype:
-                new_plant.life_exp = new_plant.life_exp * 1.01
+            # if ('C', 'c') in new_plant.genotype:
+            #     new_plant.life_exp = new_plant.life_exp * 1.01
     except Exception as e:
         pass
 
