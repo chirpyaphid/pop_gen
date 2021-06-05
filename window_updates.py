@@ -37,7 +37,7 @@ def draw_window(
         pygame.draw.rect(WIN, (0, 0, 0), terrains.WET_TERRAIN)
     else:
         pygame.draw.rect(WIN, (200, 20, 20), terrains.DRY_TERRAIN)
-        # pygame.draw.rect(WIN, (150, 0, 150), terrains.SWAMP)
+        pygame.draw.rect(WIN, (150, 0, 150), terrains.SWAMP)
         pygame.draw.rect(WIN, (20, 20, 200), terrains.WET_TERRAIN)
 
     for plant in male_plants:
@@ -80,9 +80,9 @@ def draw_window(
         WIN.blit(f_count, [5, x])
         x += 25
 
-        p_count = FONT.render(f"Phenos: {len(c_phenos)}", True, base['YELLOW'])
-        WIN.blit(p_count, [5, x])
-        x += 15
+        # p_count = FONT.render(f"Phenos: {len(c_phenos)}", True, base['YELLOW'])
+        # WIN.blit(p_count, [5, x])
+        # x += 15
         g_count = FONT.render(f"Genotypes: {genotypes}", True, base['WHITE'])
         WIN.blit(g_count, [5, x])
         x +=15

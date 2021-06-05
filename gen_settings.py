@@ -1,34 +1,34 @@
 import pygame
 
-MAX_POP = 1000
-MALE_MOVEMENT = 16
+MAX_POP = 500
+MALE_MOVEMENT = 5
 MALE_SPREAD = 10
-FEMALE_SPREAD = 100
+FEMALE_SPREAD = 20
 
 base = {
-    "WIDTH": 1000,
-    "HEIGHT": 1000,
+    "WIDTH":500 ,
+    "HEIGHT": 500,
     "OUTPUT_WIDTH": 0,
     "PLANT_AREA_WIDTH": 0,
-    "FINAL_WIDTH": 450,
-    "FPS": 60,
+    "FINAL_WIDTH": 0,
+    "FPS": 10,
     "WHITE": (255, 255, 255),
     "BLACK": (0, 0, 0),
     "RED": (255, 0, 0),
     "BLUE": (0, 0, 255),
     "YELLOW": (255, 255, 0),
     "GREEN": (0, 255, 0),
-    "P_HEIGHT": 6,
-    "P_WIDTH": 6,
+    "P_HEIGHT": 8,
+    "P_WIDTH": 8,
     "SEX": ('M', 'F'),
     "max_pop": MAX_POP,
-    "start_pop": int(MAX_POP * .25),
+    "start_pop": int(MAX_POP * .75),
 }
 
 END_BACK = pygame.Rect(0, 0, base['HEIGHT'], base['FINAL_WIDTH'])
 
-p1 = [('A', 'a'), ('b', 'b'), ('C', 'C'), ('D', 'd')]  # , ('E', 'e'), ('F', 'f')]
-p2 = [('A', 'a'), ('B', 'b'), ('C', 'c'), ('D', 'D')]  # , ('E', 'e')]#, ('F', 'f')]
+p1 = [('A', 'A'), ('B', 'B'), ('C', 'C')]  #, ('D', 'd') , ('E', 'e'), ('F', 'f')]
+p2 = [('A', 'a'), ('B', 'b'), ('C', 'c')]  #, ('D', 'D')]  # , ('E', 'e')]#, ('F', 'f')]
 
 parents = [p1, p2]
 
@@ -67,33 +67,33 @@ phenotypes = {"dom": {
 }
 
 event_triggers = {
-    "pop_trigger1": .07,
-    "pop_trigger2": .06,
-    "pop_trigger3": .05,
+    "pop_trigger1": .9,
+    "pop_trigger2": .25,
+    "pop_trigger3": .1,
 }
 
 plant_details = {
-    'm_life_min': 4000,
-    'm_life_max': 10000,
+    'm_life_min': 100,
+    'm_life_max': 600,
 
-    'min_males': MAX_POP * .1,
+    'min_males': MAX_POP * .05,
     'male_movement': MALE_MOVEMENT,
     'male_movement_min': MALE_MOVEMENT * -1,
 
     'male_spread': MALE_SPREAD,
     'male_spread_min': MALE_SPREAD * -1,
 
-    'f_life_min': 500,
-    'f_life_max': 5000,
-    'mm_age': 50000,
+    'f_life_min': 60000,
+    'f_life_max': 70000,
+    'mm_age': 9000,
 
     'female_spread': FEMALE_SPREAD,
     'female_spread_min': FEMALE_SPREAD * -1,
 
-    'max_pollination': 10,
+    'max_pollination': 150,
     'death': 0,
 
-    'mutation_point': 350,
+    'mutation_point': 50,
 
 }
 

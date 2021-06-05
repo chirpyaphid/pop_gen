@@ -22,7 +22,8 @@ class plant:
         self.gen = 0
         self.offspring = 0
         self.pollination_count = 0
-        self.max_pollination_count = 50
+        self.max_pollination_count = 0
+        self.max_pollination = 100
         self.movement = MALE_MOVEMENT
 
     def divide(self):
