@@ -3,7 +3,24 @@ import pygame
 import collections
 import pickle
 
-# FONT = pygame.font.SysFont(None, 20)
+males = []
+females = []
+current_phenos = []
+parent_plants = []
+gen_list = {}
+bottleneck_factor = 0.1
+off_spring = 200
+max_generations = 0
+
+pygame.init()
+pygame.display.set_caption(f"Sim Window ID: {random.randint(0, 10)}")
+FONT = pygame.font.SysFont(None, 30)
+
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+RED = (255, 0, 0)
+YELLOW = (255, 255, 0)
+
 try:
     infile = open('gen_colours.json', 'rb')
     gen_colours = pickle.load(infile)
@@ -37,62 +54,49 @@ base = {
     "SEX": ('M', 'F'),
 }
 
-pygame.init()
-pygame.display.set_caption(f"Sim Window ID: {random.randint(0, 10)}")
 WIN = pygame.display.set_mode((base['WIDTH'], base['HEIGHT']))
-FONT = pygame.font.SysFont(None, 30)
-WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
-RED = (255, 0, 0)
-YELLOW = (255, 255, 0)
-
-males = []
-females = []
-current_phenos = []
-parent_plants = []
-
-gen_list = {}
 
 p1 = [('A', 'a'), ('B', 'b'), ('C', 'c'), ('D', 'd'),
-      ('E', 'e'), ('F', 'f'),('G', 'g'),('L', 'h'),
-      ('I', 'i'),('J', 'j'),('K', 'k'),('L', 'l'),
-      ('M', 'm'),('N', 'n'),('O', 'o')]
+      ('E', 'e'), ('F', 'f'), ('G', 'g'), ('L', 'h'),
+      ('I', 'i'), ('J', 'j'), ('K', 'k'), ('L', 'l'),
+      ('M', 'm'), ('N', 'n'), ('O', 'o')]
 
 p2 = [('A', 'A'), ('B', 'B'), ('C', 'C'), ('D', 'd'),
-      ('E', 'e'), ('F', 'f'),('G', 'g'),('L', 'h'),
-      ('I', 'i'),('J', 'j'),('K', 'k'),('L', 'l'),
-      ('M', 'm'),('N', 'n'),('O', 'o')]
+      ('E', 'e'), ('F', 'f'), ('G', 'g'), ('L', 'h'),
+      ('I', 'i'), ('J', 'j'), ('K', 'k'), ('L', 'l'),
+      ('M', 'm'), ('N', 'n'), ('O', 'o')]
 
 parents = [p1[:5], p2[:5]]
 
-phenotypes = {"dom": {
-    "A": "Tall",
-    "B": "Broad",
-    "C": "Citrus",
-    "D": "Green",
-    "E": "Pine",
-    "F": "THC",
-    "G": "5 LF",
-    "H": "Spice",
-    "I": "10 W",
-    "J": "PM R",
-    "K": "Dense",
-    "L": "Normal L",
-    "M": "Normal L",
-    "N": "Sandal Wood",
-    "O": "CBG",
-    "P": "",
-    "Q": "",
-    "R": "",
-    "S": "",
-    "T": "",
-    "U": "",
-    "V": "",
-    "W": "",
-    "X": "",
-    "Y": "",
-    "Z": "",
-},
+phenotypes = {
+    "dom": {
+        "A": "Tall",
+        "B": "Broad",
+        "C": "Citrus",
+        "D": "Green",
+        "E": "Pine",
+        "F": "THC",
+        "G": "5 LF",
+        "H": "Spice",
+        "I": "10 W",
+        "J": "PM R",
+        "K": "Dense",
+        "L": "Normal L",
+        "M": "Normal L",
+        "N": "Sandal Wood",
+        "O": "CBG",
+        "P": "",
+        "Q": "",
+        "R": "",
+        "S": "",
+        "T": "",
+        "U": "",
+        "V": "",
+        "W": "",
+        "X": "",
+        "Y": "",
+        "Z": "",
+    },
     "res": {
         "a": "Short",
         "b": "Narrow",
@@ -120,33 +124,11 @@ phenotypes = {"dom": {
         "x": "",
         "y": "",
         "z": "",
-    },
-    "codom": {
-        "BB": {"life_exp": 1.2},
-        "AA": {"life_exp": 2},
-        "aa": {"life_exp": 1},
-        "bb": {"life_exp": 1},
-        "aA": {"life_exp": 1},
-        "bB": {"life_exp": 1},
-        "Aa": {"life_exp": 1},
-        "Bb": {"life_exp": 1},
-    },
-    "linked": {
-        "AA": {"height": 2},
-        "aa": {"height": 1},
-        "bb": {"width": 1},
-        "BB": {"width": 3},
     }
 }
 
-off_spring = 10
-max_generations = 0
-
-
 def genotype(genotype):
     global gen_colours
-    nc = []
-    colour = ()
     if len(gen_colours.keys()) == 0:
         colour = (random.randint(60, 245), random.randint(60, 245), random.randint(60, 245))
         gen_colours[str(genotype[0])] = colour
@@ -164,10 +146,7 @@ def genotype(genotype):
 
 
 def phenotype_colour(phenotype):
-    # print(phenotype)
     global pheno_colours
-    nc = []
-    colour = ()
     if len(pheno_colours.keys()) == 0:
         colour = (random.randint(60, 245), random.randint(60, 245), random.randint(60, 245))
         pheno_colours[str(phenotype)] = colour
@@ -181,7 +160,6 @@ def phenotype_colour(phenotype):
     outfile = open(filename, 'wb')
     pickle.dump(pheno_colours, outfile)
     outfile.close()
-    # print(colour)
     return colour
 
 
@@ -226,13 +204,16 @@ class plant:
         return self.location, colour
 
 
-def create_next_gen(p1, p2, phenotypes, gen_list):
+def create_next_gen(p1, p2, phenotypes, gen_list,mode='n'):
     global off_spring
+    local_off_spring = off_spring
+    if mode == 'b':
+        local_off_spring = int(local_off_spring * bottleneck_factor)
     new_plants = []
     gen_next = 0
     off_count = 0
     gen_list[p1.gen + 1] = []
-    for x in range(off_spring):
+    for x in range(local_off_spring):
         new_plant = plant(list(zip(p1.divide(),
                                    p2.divide())),
                           f"Plant", phenotypes)
@@ -242,29 +223,31 @@ def create_next_gen(p1, p2, phenotypes, gen_list):
         new_plant.dad_center = p2.location.center
 
         new_plant.sex = base['SEX'][random.randint(0, 1)]
-        gen_0 = 0
 
         new_plant.location = pygame.Rect(gen_next,
                                          (new_plant.gen + 1) * 50,
                                          base['P_HEIGHT'],
                                          base['P_WIDTH'])
         off_count += 1
-        if off_count > off_spring:
+        if off_count > local_off_spring:
             gen_next = 0 + base['P_WIDTH']
             off_count = 0
         else:
-            gen_next += base['WIDTH'] // off_spring
+            gen_next += base['WIDTH'] // local_off_spring
         gen_list[new_plant.gen].append(new_plant)
         new_plants.append(new_plant)
     return new_plants
 
 
-def create_crosses(p1, p2, phenotypes):
-    global off_spring
+def create_crosses(p1, p2, phenotypes, mode='n'):
+    global off_spring, local_off_spring
+    local_off_spring = off_spring
+    if mode == 'b':
+        local_off_spring = int(local_off_spring * bottleneck_factor)
     new_plants = []
     gen_next = 0
     off_count = 0
-    for x in range(off_spring):
+    for x in range(local_off_spring):
         new_plant = plant(list(zip(p1.divide(),
                                    p2.divide())),
                           f"Plant", phenotypes)
@@ -288,11 +271,11 @@ def create_crosses(p1, p2, phenotypes):
                                              base['P_HEIGHT'],
                                              base['P_WIDTH'])
             off_count += 1
-            if off_count > off_spring:
+            if off_count > local_off_spring:
                 gen_next = 0 + base['P_WIDTH']
                 off_count = 0
             else:
-                gen_next += base['WIDTH'] // off_spring
+                gen_next += base['WIDTH'] // local_off_spring
 
         try:
             gen_list[new_plant.gen].append(new_plant)
@@ -352,13 +335,14 @@ while max(gen_list.keys()) < max_generations + 1:
 
 
 def main():
-    global gen_colours, gen_list, plant_list
+    global gen_colours, gen_list, plant_list, off_spring,local_off_spring,bottleneck_factor
 
     clock = pygame.time.Clock()
 
     run = True
     draw_window(plant_list, gen_list)
     next_gen_parents = []
+    mode = 'n'
     while run:
         clock.tick(base['FPS'])
         for event in pygame.event.get():
@@ -367,11 +351,38 @@ def main():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LCTRL:
                     parent_list = list(gen_list.keys())
-                    np1 = random.randint(0, off_spring - 1)
-                    create_next_gen(gen_list[parent_list[-1]][np1],
-                                    gen_list[parent_list[-1]][1],
-                                    phenotypes, gen_list)
-                    draw_window(plant_list, gen_list)
+                    np1 = random.randint(0, len(parent_list) - 1)
+                    try:
+                        create_next_gen(gen_list[parent_list[-1]][np1],
+                                        gen_list[parent_list[-1]][1],
+                                        phenotypes, gen_list,mode)
+                        draw_window(plant_list, gen_list)
+                    except Exception as e:
+                        pass
+
+                if event.key == pygame.K_b:
+                    mode = 'b'
+                if event.key == pygame.K_n:
+                    mode = 'n'
+                if event.key == pygame.K_1:
+                    bottleneck_factor = 0.1
+                if event.key == pygame.K_2:
+                    bottleneck_factor = 0.2
+                if event.key == pygame.K_3:
+                    bottleneck_factor = 0.3
+                if event.key == pygame.K_4:
+                    bottleneck_factor = 0.4
+                if event.key == pygame.K_5:
+                    bottleneck_factor = 0.5
+                if event.key == pygame.K_6:
+                    bottleneck_factor = 0.6
+                if event.key == pygame.K_7:
+                    bottleneck_factor = 0.7
+                if event.key == pygame.K_8:
+                    bottleneck_factor = 0.8
+                if event.key == pygame.K_9:
+                    bottleneck_factor = 0.9
+
             if event.type == pygame.MOUSEBUTTONDOWN:
                 active_gens = gen_list
                 try:
@@ -382,17 +393,15 @@ def main():
                                 plant.location.height = plant.location.height * 1.5
                                 draw_window(plant_list, gen_list)
                                 next_gen_parents.append(plant)
-                                # print(plant.genotype,plant.pheno())
                                 if len(next_gen_parents) == 2:
                                     create_next_gen(next_gen_parents[0],
                                                     next_gen_parents[1],
-                                                    phenotypes, gen_list)
+                                                    phenotypes, gen_list,mode)
                                     draw_window(plant_list, gen_list)
                                     next_gen_parents = []
                         for plant in parent_plants:
                             if plant.location.collidepoint(pygame.mouse.get_pos()):
                                 next_gen_parents.append(plant)
-                                # print(plant.genotype,plant.pheno())
                                 if len(next_gen_parents) == 2:
                                     create_next_gen(next_gen_parents[0],
                                                     next_gen_parents[1],
