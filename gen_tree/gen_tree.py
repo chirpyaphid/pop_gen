@@ -35,8 +35,6 @@ try:
 except Exception as e:
     pheno_colours = {}
 
-# print(len(gen_colours))
-
 base = {
     "WIDTH": 1800,
     "HEIGHT": 1000,
@@ -49,7 +47,7 @@ base = {
     "BLUE": (0, 0, 255),
     "YELLOW": (255, 255, 0),
     "GREEN": (0, 255, 0),
-    "P_HEIGHT": 10,
+    "P_HEIGHT": 5,
     "P_WIDTH": 20,
     "SEX": ('M', 'F'),
 }
@@ -127,6 +125,7 @@ phenotypes = {
     }
 }
 
+
 def genotype(genotype):
     global gen_colours
     if len(gen_colours.keys()) == 0:
@@ -179,6 +178,7 @@ class plant:
                                     50,
                                     base['P_HEIGHT'],
                                     base['P_WIDTH'])
+        self.used = 'n'
 
     def divide(self):
         genes = []
@@ -204,7 +204,7 @@ class plant:
         return self.location, colour
 
 
-def create_next_gen(p1, p2, phenotypes, gen_list,mode='n'):
+def create_next_gen(p1, p2, phenotypes, gen_list, mode='n'):
     global off_spring
     local_off_spring = off_spring
     if mode == 'b':
@@ -233,7 +233,7 @@ def create_next_gen(p1, p2, phenotypes, gen_list,mode='n'):
             gen_next = 0 + base['P_WIDTH']
             off_count = 0
         else:
-            gen_next += base['WIDTH'] // local_off_spring
+            gen_next += (base['WIDTH'] // local_off_spring)
         gen_list[new_plant.gen].append(new_plant)
         new_plants.append(new_plant)
     return new_plants
@@ -335,7 +335,7 @@ while max(gen_list.keys()) < max_generations + 1:
 
 
 def main():
-    global gen_colours, gen_list, plant_list, off_spring,local_off_spring,bottleneck_factor
+    global gen_colours, gen_list, plant_list, off_spring, local_off_spring, bottleneck_factor
 
     clock = pygame.time.Clock()
 
@@ -343,6 +343,7 @@ def main():
     draw_window(plant_list, gen_list)
     next_gen_parents = []
     mode = 'n'
+    run = '0'
     while run:
         clock.tick(base['FPS'])
         for event in pygame.event.get():
@@ -350,12 +351,18 @@ def main():
                 run = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LCTRL:
+                    # if run == 0:
                     parent_list = list(gen_list.keys())
-                    np1 = random.randint(0, len(parent_list) - 1)
+                    np1 = random.randint(0, len(gen_list[parent_list[-1]]) - 1)
+                    np2 = random.randint(0, len(gen_list[parent_list[-1]]) - 1)
+                    while np2 == np1:
+                        np2 = random.randint(0, len(gen_list[parent_list[-1]]) - 1)
+                    gen_list[parent_list[-1]][np1].used = 'y'
+                    gen_list[parent_list[-1]][np2].used = 'y'
                     try:
                         create_next_gen(gen_list[parent_list[-1]][np1],
-                                        gen_list[parent_list[-1]][1],
-                                        phenotypes, gen_list,mode)
+                                        gen_list[parent_list[-1]][np2],
+                                        phenotypes, gen_list, mode)
                         draw_window(plant_list, gen_list)
                     except Exception as e:
                         pass
@@ -383,6 +390,18 @@ def main():
                 if event.key == pygame.K_9:
                     bottleneck_factor = 0.9
 
+                if event.key == pygame.K_p:
+                    gen_list_p = {}
+                    for key in gen_list.keys():
+                        gen_list_p[key] = []
+                        for plant in gen_list[key]:
+                            if plant.used == 'y':
+                                gen_list_p[key].append(plant)
+                    draw_window(plant_list, gen_list_p)
+
+                if event.key == pygame.K_r:
+                    draw_window(plant_list, gen_list)
+
             if event.type == pygame.MOUSEBUTTONDOWN:
                 active_gens = gen_list
                 try:
@@ -393,10 +412,12 @@ def main():
                                 plant.location.height = plant.location.height * 1.5
                                 draw_window(plant_list, gen_list)
                                 next_gen_parents.append(plant)
+                                next_gen_parents[0].used = 'y'
+                                next_gen_parents[1].used = 'y'
                                 if len(next_gen_parents) == 2:
                                     create_next_gen(next_gen_parents[0],
                                                     next_gen_parents[1],
-                                                    phenotypes, gen_list,mode)
+                                                    phenotypes, gen_list, mode)
                                     draw_window(plant_list, gen_list)
                                     next_gen_parents = []
                         for plant in parent_plants:
