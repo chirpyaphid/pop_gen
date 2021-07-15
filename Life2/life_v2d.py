@@ -3,6 +3,7 @@ import random
 import pickle
 from colour import Color
 from colour import make_color_factory, HSL_equivalence, RGB_color_picker
+import math
 
 pygame.init()
 
@@ -10,8 +11,8 @@ base = {
     'WIDTH': 800,
     'HEIGHT': 300,
     'SEX': ('M', 'F'),
-    'M_MOVEMENT': 2,
-    'F_MOVEMENT': 2,
+    'M_MOVEMENT': 3,
+    'F_MOVEMENT': 3,
     "FPS": 60,
     "WHITE": (255, 255, 255),
     "BLACK": (0, 0, 0),
@@ -49,6 +50,17 @@ mutations = [('B', 'b'), ('C', 'c'), ('D', 'd'), ('E', 'e'), ('F', 'f'), ('G', '
 infile = open('gen_colours.json', 'rb')
 gen_colours = pickle.load(infile)
 infile.close()
+
+
+# current_cx = current_rect.centerx
+# current_cy = current_rect.centery
+#
+# for rect in rect_list:
+#     cx = rect.centerx
+#     cy = rect.centery
+#
+#     if math.sqrt(abs(current_cx-cx)**2 + abs(current_cy-cy)**2)) < distance:
+#         nearest_rect = rect
 
 
 class organism:
@@ -163,19 +175,38 @@ def update_organisms(organisms):
     updated_organisms = []
     dead = []
     alive = []
+    AA_ORGS = []
     for og in organisms:
-        # if ('F', 'f') in og.genotype or ('A', 'a') in og.genotype and og.location.colliderect(WET_TERRAIN):
-        #     og.m_movement = base['M_MOVEMENT'] * 3
-        #     og.f_movement = base['F_MOVEMENT'] * 3
-        # else:
-        #     og.m_movement = base['M_MOVEMENT']
-        #     og.f_movement = base['F_MOVEMENT']
-        # if ('f', 'F') in og.genotype or ('a', 'A') in og.genotype and og.location.colliderect(DRY_TERRAIN):
-        #     og.m_movement = base['M_MOVEMENT'] * 3
-        #     og.f_movement = base['F_MOVEMENT'] * 3
-        # else:
-        #     og.m_movement = base['M_MOVEMENT']
-        #     og.f_movement = base['F_MOVEMENT']
+        if ('A', 'A') in og.genotype:
+            AA_ORGS.append(og.location)
+    max_distance = {}
+    min_distance = {}
+    for og in organisms:
+        # distance = 60
+        # if ('A', 'A') in og.genotype:
+        #     current_cx = og.location.centerx
+        #     current_cy = og.location.centery
+        #     for rect in AA_ORGS:
+        #         cx = rect.centerx
+        #         cy = rect.centery
+        #         d = math.sqrt(abs(current_cx - cx) ** 2 + abs(current_cy - cy) ** 2)
+        #         # print(d)
+        #         # print(len(max_distance), min_distance)
+            #     if len(max_distance) == 0:
+            #         max_distance['d'] = d
+            #         max_distance['rect'] = rect
+            #     if len(min_distance) == 0:
+            #         min_distance['d'] = d
+            #         min_distance['rect'] = rect
+            #
+            #     elif d > max_distance['d']:
+            #         max_distance['d'] = d
+            #         max_distance['rect'] = rect
+            #     elif d < min_distance['d']:
+            #         min_distance['d'] = d
+            #         min_distance['rect'] = rect
+            # print(max_distance, min_distance)
+
         og.age += 1
         if og.sex == 'F':
             og.location.x += random.randint(-og.f_movement, og.f_movement)
